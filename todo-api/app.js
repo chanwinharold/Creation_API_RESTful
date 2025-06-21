@@ -1,9 +1,13 @@
 const express = require("express")
-const app = express()
 const mongoose = require("mongoose")
 const taskRoutes = require("./routes/tasks")
+const app = express()
 
-mongoose.connect("mongodb+srv://<user>:<password>@cluster0.44esyvl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+require("dotenv").config()
+const MONGO_DB_URL = process.env.MONGO_DB_URL
+
+
+mongoose.connect(MONGO_DB_URL)
     .then(() => console.log("✅ Connexion réussie"))
     .catch(() => console.log("❌ Connexion échouée"))
 
