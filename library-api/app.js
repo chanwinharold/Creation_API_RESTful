@@ -1,9 +1,12 @@
 const express = require("express")
-const app = express()
 const mongoose = require("mongoose")
+require("dotenv").config()
 const bookRouter = require("./routes/books")
+const app = express()
 
-mongoose.connect("mongodb+srv://<user>:<password>@cluster0.44esyvl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+const MONGO_DB_URL = process.env.MONGO_DB_URL
+
+mongoose.connect(MONGO_DB_URL)
     .then(() => console.log("Connexion à la base de donnée réussie !"))
     .catch((error) => console.log("Échec de la connexion à la base de donnée", error))
 
