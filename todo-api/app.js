@@ -1,6 +1,7 @@
 const express = require("express")
 const mongoose = require("mongoose")
-const taskRoutes = require("./routes/task")
+const taskRouter = require("./routes/task")
+const userRouter = require("./routes/user")
 const app = express()
 
 require("dotenv").config()
@@ -13,7 +14,8 @@ mongoose.connect(MONGO_DB_URL)
 
 app.use(express.json())
 
-app.use("/tasks", taskRoutes)
+app.use("/tasks", taskRouter)
+app.use("/auth", userRouter)
 
 app.use((req, res) => {
     res.status(404).json({ message: "Route introuvable !" });
