@@ -6,7 +6,8 @@ const contactSchema = new mongoose.Schema({
     nom: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     tel: { type: String, required: true, unique: true },
-    favori: { type: Boolean, required: true }
+    favori: { type: Boolean, required: true },
+    userId: { type: String, required: true }
 })
 contactSchema.plugin(uniqueValidator)
 
