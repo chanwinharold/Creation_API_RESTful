@@ -1,0 +1,35 @@
+import psycopg
+from psycopg.rows import dict_row
+import dotenv
+import os
+
+
+dotenv.load_dotenv(dotenv_path=".env")
+
+DB_URI=os.getenv('DATABASE_URL')
+DB_URL=(f"dbname={os.getenv('DATABASE_NAME')} "
+        f"user={os.getenv('DATABASE_USER')} "
+        f"host={os.getenv('DATABASE_HOST')} "
+        f"port={os.getenv('DATABASE_PORT')} "
+        f"password={os.getenv('DATABASE_PASSWORD')}")
+
+class DBConnect:
+    def __init__(self):
+        self.conn_ = None
+        self.curs_ = None
+
+    def connect(self):
+        try:
+            self.conn_ = psycopg.connect(DB_URI or DB_URL, row_factory=dict_row)
+            self.curs_ = self.conn_.cursor()
+
+            self.curs_.execute("""SELECT 1""")
+            print("\n\t✅ Connexion à la base de donnée réussie.\n")
+
+        except Exception as error:
+            print("\n\t❌ Échec de connexion à la base de données\n")
+            raise Exception(error)
+
+db = DBConnect()
+db.connect()
+conn, curs = db.conn_, db.curs_
