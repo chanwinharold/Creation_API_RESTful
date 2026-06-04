@@ -18,11 +18,16 @@ class DBConnect:
         self.conn_ = None
         self.curs_ = None
 
+    def open(self):
+        self.conn_ = psycopg.connect(DB_URI or DB_URL, row_factory=dict_row)
+        self.curs_ = self.conn_.cursor()
+
+    def close(self):
+        self.conn_.close()
+
     def connect(self):
         try:
-            self.conn_ = psycopg.connect(DB_URI or DB_URL, row_factory=dict_row)
-            self.curs_ = self.conn_.cursor()
-
+            self.open()
             self.curs_.execute("""SELECT 1""")
             print("\n\t✅ Connexion à la base de donnée réussie.\n")
 
@@ -32,4 +37,3 @@ class DBConnect:
 
 db = DBConnect()
 db.connect()
-conn, curs = db.conn_, db.curs_
