@@ -1,7 +1,12 @@
-from fastapi import FastAPI, status, HTTPException
+from fastapi import FastAPI, status, HTTPException, Depends
+from sqlalchemy.orm import Session
 from schemes.todo_schema import TodoGlobalResponse, TodoPostRequest, TodoUpdateRequest
+from models.todo_model import Base
+from database import engine, get_db
 from models.todo_model import db_get_todos, db_post_todo, db_get_todo, db_update_todo, db_delete_todo
+from models import todo_model
 
+Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
@@ -10,7 +15,7 @@ def root():
     return {"data": None, "detail": "Application en cours..."}
 
 @app.post("/todos", status_code=status.HTTP_201_CREATED)
-def post_todo(todo_: TodoPostRequest):
+def post_todo(todo_: TodoPostRequest, db: Session = Depends(get_db)):
     todo_posted_: TodoGlobalResponse = db_post_todo(todo_)
     return {"data": todo_posted_, "detail": "Todo posted successfully !"}
 

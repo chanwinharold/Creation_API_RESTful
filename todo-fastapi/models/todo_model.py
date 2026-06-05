@@ -1,3 +1,18 @@
+from database import Base
+from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP
+from sqlalchemy.sql.expression import text
+
+
+class Todo(Base):
+    __tablename__ = 'tf_todos'
+
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    title = Column(String, nullable=False)
+    done = Column(Boolean, nullable=False, server_default='False')
+    category = Column(String, nullable=False)
+    date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+
+
 from database import db
 from schemes.todo_schema import TodoGlobalResponse, TodoPostRequest, TodoUpdateRequest
 
@@ -22,7 +37,7 @@ def db_get_todo(id_: int) -> TodoGlobalResponse:
 def db_post_todo(todo: TodoPostRequest) -> TodoGlobalResponse:
     db.open()
     db.curs_.execute("""
-        INSERT INTO tf_todos (title, category) 
+        INSERT INTO tf_todos (title, category)
         VALUES (%s, %s)
         RETURNING *
     """, (todo.title, todo.category))
@@ -35,7 +50,7 @@ def db_update_todo(id_: int, todo_: TodoUpdateRequest) -> TodoGlobalResponse:
     db.open()
     db.curs_.execute("""
         UPDATE tf_todos
-        SET title = %s, 
+        SET title = %s,
             category = %s,
             done = %s
         WHERE id = %s

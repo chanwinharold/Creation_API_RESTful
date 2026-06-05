@@ -1,3 +1,22 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+import dotenv, os
+
+dotenv.load_dotenv(dotenv_path='.env')
+engine = create_engine(os.getenv('DATABASE_URL') or "")
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 import psycopg
 from psycopg.rows import dict_row
 import dotenv
