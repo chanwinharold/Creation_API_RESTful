@@ -10,11 +10,11 @@ Base = declarative_base()
 
 
 def get_db():
-    db = SessionLocal()
+    db_ = SessionLocal()
     try:
-        yield db
+        yield db_
     finally:
-        db.close()
+        db_.close()
 
 
 import psycopg
