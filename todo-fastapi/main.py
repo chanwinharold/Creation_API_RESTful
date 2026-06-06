@@ -1,6 +1,6 @@
 from fastapi import FastAPI, status, HTTPException, Depends
 from sqlalchemy.orm import Session
-from schemes.todo_schema import TodoPostRequest, TodoUpdateRequest
+from schemes.todo_schema import TodoPostRequest, TodoUpdateRequest, TodoDictResponse, TodosDictResponse
 from models.todo_model import Base
 from database import engine, get_db
 # from models.todo_model import db_get_todos, db_post_todo, db_get_todo, db_update_todo, db_delete_todo
@@ -15,7 +15,7 @@ app = FastAPI()
 def root():
     return {"data": None, "detail": "Application en cours..."}
 
-@app.post("/todos", status_code=status.HTTP_201_CREATED)
+@app.post("/todos", status_code=status.HTTP_201_CREATED, response_model=TodoDictResponse)
 def post_todo(todo_: TodoPostRequest, db_: Session = Depends(get_db)):
     # todo_posted_: TodoGlobalResponse = db_post_todo(todo_)
     todo_posted_ = model.Todo(**todo_.model_dump())
@@ -24,7 +24,7 @@ def post_todo(todo_: TodoPostRequest, db_: Session = Depends(get_db)):
     db_.refresh(todo_posted_)
     return {"data": todo_posted_, "detail": "Todo posted successfully !"}
 
-@app.get("/todos")
+@app.get("/todos", response_model=TodosDictResponse)
 def get_todos(db_: Session = Depends(get_db)):
     # todos_: list[TodoGlobalResponse] = db_get_todos()
     todos_ = db_.query(model.Todo).all()
@@ -34,7 +34,7 @@ def get_todos(db_: Session = Depends(get_db)):
     return {"data": todos_, "detail": "All todos retrieved successfully !"}
 
 
-@app.get("/todos/{id_}")
+@app.get("/todos/{id_}", response_model=TodoDictResponse)
 def get_post(id_: int, db_: Session = Depends(get_db)):
     # todo_: TodoGlobalResponse = db_get_todo(id_)
     todo_ = db_.query(model.Todo).filter(model.Todo.id == id_).first()
@@ -55,7 +55,7 @@ def delete_todo(id_: int, db_: Session = Depends(get_db)):
     db_.commit()
     return
 
-@app.put("/todos/{id_}")
+@app.put("/todos/{id_}", response_model=TodoDictResponse)
 def update_todo(id_: int, todo_: TodoUpdateRequest, db_: Session = Depends(get_db)):
     # todo_updated_: TodoGlobalResponse = db_update_todo(id_, todo_)
     todo_updated_ = db_.query(model.Todo).filter(model.Todo.id == id_)

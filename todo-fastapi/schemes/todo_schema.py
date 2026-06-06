@@ -1,5 +1,5 @@
-from datetime import time
-from typing import Optional, Literal
+from datetime import datetime
+from typing import Optional, Literal, List
 from pydantic import BaseModel
 
 
@@ -7,8 +7,25 @@ class TodoGlobalResponse(BaseModel):
     id: int
     title: str
     done: bool
-    date: time
+    date: datetime
     category: Literal['courses', 'santé', 'études', 'informatique', 'loisir', 'ménage']
+
+    class Config:
+        from_attributes = True
+
+class TodoDictResponse(BaseModel):
+    data: TodoGlobalResponse
+    detail: str
+
+    class Config:
+        from_attributes = True
+
+class TodosDictResponse(BaseModel):
+    data: List[TodoGlobalResponse]
+    detail: str
+
+    class Config:
+        from_attributes = True
 
 class TodoPostRequest(BaseModel):
     title: str
