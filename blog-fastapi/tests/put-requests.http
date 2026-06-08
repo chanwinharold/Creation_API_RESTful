@@ -1,0 +1,15 @@
+### PUT request to update a post by {id_}
+@id_ = 2
+PUT http://localhost:8000/posts/{{id_}}
+Content-Type: application/json
+
+//{"title": "Quantum Computing Breakthroughs in 2026", "content": "Recent advancements in quantum error correction and superconducting qubits are bringing us closer to practical quantum computers.", "image": "quantum_pic.png", "category": "technology", "user_id": 2}
+
+{"title": "CRISPR: Editing the Human Genome", "content": "The latest developments in gene editing technology and their implications for treating genetic disorders.", "image": "crispr_dna.jpg", "category": "science", "user_id": 1}
+
+### {"title": "Sustainable Fashion Trends for Spring", "content": "Eco-friendly fabrics and ethical production methods are reshaping the fashion industry this season.", "image": "sustainable_fashion.png", "category": "fashion", "user_id": 3}
+
+### {"title": "Ketogenic Diet: A Comprehensive Guide", "content": "Everything you need to know about the keto diet, from macronutrient ratios to potential health benefits.", "image": "keto_meal.jpg", "category": "nutrition", "user_id": 2}
+
+### {"title": "The Evolution of Jazz Harmonies", "content": "Tracing the development of jazz from blues roots to complex modal and free jazz compositions.", "image": "jazz_music.png", "category": "music", "user_id": 4}
+###

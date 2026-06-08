@@ -1,16 +1,22 @@
+from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy.sql.expression import text
 from datetime import datetime
 from typing import Literal
-from sqlmodel import Field, SQLModel
+from database import Base
 
 
-class Posts(SQLModel, table=True):
-    __tablename__ = "bf_posts"
+class Posts(Base):
+    __tablename__ = 'bf_posts'
 
-    id: int | None = Field(default=None, primary_key=True)
-    title: str = Field(nullable=False, unique=True, max_length=255)
-    content: str = Field(nullable=False, max_length=4096)
-    image: str = Field(default='pic_default.png', nullable=False)
-    category: Literal['art', 'technology', 'science', 'fashion', 'nutrition', 'music', 'game', 'politic', 'others'] = Field(default='others', nullable=False)
-    created_at: datetime = Field(default_factory=datetime.now)
-    modify_at: datetime | None = Field(default=None, nullable=True)
-    user_id: int = Field(default=1)
+    id: int = Column(Integer, primary_key=True, nullable=False, unique=True, autoincrement=True)
+    title: str = Column(String, nullable=False, unique=True)
+    content: str = Column(String, nullable=False)
+    image: str = Column(String, server_default='pic_default.png', nullable=False)
+    category: Literal[
+        'art', 'technology', 'science',
+        'fashion', 'nutrition', 'music',
+        'game', 'politic', 'others'
+    ] = Column(String, server_default='others', nullable=False)
+    created_at: datetime = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
+    modified_at: datetime | None = Column(TIMESTAMP(timezone=True), nullable=True)
+    user_id: int = Column(Integer, nullable=False)

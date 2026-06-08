@@ -1,0 +1,12 @@
+### GET request to root endpoint
+GET http://127.0.0.1:8000
+Accept: application/json
+
+### GET request to all posts
+GET http://127.0.0.1:8000/posts
+Accept: application/json
+
+### GET request to one post by {id_}
+@id_ = 2
+GET http://127.0.0.1:8000/posts/{{id_}}
+Accept: application/json

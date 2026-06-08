@@ -1,0 +1,4 @@
+### DELETE request to delete a post by {id_}
+@id_ = 2
+DELETE http://127.0.0.1:8000/posts/{{id_}}
+Content-Type: application/json
