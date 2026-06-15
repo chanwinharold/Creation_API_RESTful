@@ -1,0 +1,7 @@
+###
+# @name Get Todos
+GET http://127.0.0.1:8000/todos
+
+###
+# @name Get Todo
+GET http://127.0.0.1:8000/todos/1

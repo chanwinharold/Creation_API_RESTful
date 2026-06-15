@@ -1,0 +1,9 @@
+###
+# @name Post Todo
+POST http://127.0.0.1:8000/todos
+Content-Type: application/json
+
+{
+    "title": "Faire la vaiselle",
+    "category": "ménage"
+}

@@ -1,0 +1,11 @@
+###
+# @name Update Todo
+PUT http://127.0.0.1:8000/todos/1
+Content-Type: application/json
+
+{
+    "title": "Faire à manger",
+    "done": true,
+    "date": "2026-06-10",
+    "category": "courses"
+}

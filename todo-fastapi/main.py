@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from schemes.todo_schema import TodoPostRequest, TodoUpdateRequest, TodoDictResponse, TodosDictResponse
 from models.todo_model import Base
 from database import engine, get_db
-# from models.todo_model import db_get_todos, db_post_todo, db_get_todo, db_update_todo, db_delete_todo
 from models import todo_model as model
+# from models.todo_model import db_get_todos, db_post_todo, db_get_todo, db_update_todo, db_delete_todo
 
 
 Base.metadata.create_all(bind=engine)

@@ -12,6 +12,15 @@ class Todo(Base):
     category = Column(String, nullable=False)
     date = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
 
+class User(Base):
+    __tablename__ = 'tf_users'
+
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    email = Column(String, nullable=True, unique=True)
+    name = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+
 
 from database import db
 from schemes.todo_schema import TodoGlobalResponse, TodoPostRequest, TodoUpdateRequest
