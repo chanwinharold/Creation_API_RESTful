@@ -1,11 +1,12 @@
 from fastapi import FastAPI, status, HTTPException, Depends
 from sqlalchemy.orm import Session
-from schemes.todo_schema import TodoPostRequest, TodoUpdateRequest, TodoDictResponse, TodosDictResponse
-from models.todo_model import Base
 from database import engine, get_db
-from models import todo_model as model
-# from models.todo_model import db_get_todos, db_post_todo, db_get_todo, db_update_todo, db_delete_todo
-
+from schemes.todo_schema import TodoPostRequest, TodoUpdateRequest, TodoDictResponse, TodosDictResponse
+from schemes.user_schema import UserPostRequest,UserDictResponse
+from models.todo_model import Base
+from models import todo_model as tm
+from models import user_model as um
+from pwdlib import PasswordHash
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -17,8 +18,7 @@ def root():
 
 @app.post("/todos", status_code=status.HTTP_201_CREATED, response_model=TodoDictResponse)
 def post_todo(todo_: TodoPostRequest, db_: Session = Depends(get_db)):
-    # todo_posted_: TodoGlobalResponse = db_post_todo(todo_)
-    todo_posted_ = model.Todo(**todo_.model_dump())
+    todo_posted_ = tm.Todo(**todo_.model_dump())
     db_.add(todo_posted_)
     db_.commit()
     db_.refresh(todo_posted_)
@@ -26,8 +26,7 @@ def post_todo(todo_: TodoPostRequest, db_: Session = Depends(get_db)):
 
 @app.get("/todos", response_model=TodosDictResponse)
 def get_todos(db_: Session = Depends(get_db)):
-    # todos_: list[TodoGlobalResponse] = db_get_todos()
-    todos_ = db_.query(model.Todo).all()
+    todos_ = db_.query(tm.Todo).all()
 
     if not todos_:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todos Not Found")
@@ -36,8 +35,7 @@ def get_todos(db_: Session = Depends(get_db)):
 
 @app.get("/todos/{id_}", response_model=TodoDictResponse)
 def get_post(id_: int, db_: Session = Depends(get_db)):
-    # todo_: TodoGlobalResponse = db_get_todo(id_)
-    todo_ = db_.query(model.Todo).filter(model.Todo.id == id_).first()
+    todo_ = db_.query(tm.Todo).filter(tm.Todo.id == id_).first()
 
     if not todo_:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo Not Found")
@@ -45,8 +43,7 @@ def get_post(id_: int, db_: Session = Depends(get_db)):
 
 @app.delete("/todos/{id_}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_todo(id_: int, db_: Session = Depends(get_db)):
-    # todo_: TodoGlobalResponse = db_delete_todo(id_)
-    todo_ = db_.query(model.Todo).filter(model.Todo.id == id_)
+    todo_ = db_.query(tm.Todo).filter(tm.Todo.id == id_)
 
     if not todo_.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo Not Found")
@@ -57,8 +54,7 @@ def delete_todo(id_: int, db_: Session = Depends(get_db)):
 
 @app.put("/todos/{id_}", response_model=TodoDictResponse)
 def update_todo(id_: int, todo_: TodoUpdateRequest, db_: Session = Depends(get_db)):
-    # todo_updated_: TodoGlobalResponse = db_update_todo(id_, todo_)
-    todo_updated_ = db_.query(model.Todo).filter(model.Todo.id == id_)
+    todo_updated_ = db_.query(tm.Todo).filter(tm.Todo.id == id_)
 
     if not todo_updated_.first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Todo Not Found")
@@ -66,3 +62,11 @@ def update_todo(id_: int, todo_: TodoUpdateRequest, db_: Session = Depends(get_d
     todo_updated_.update(todo_.model_dump(), synchronize_session=False)
     db_.commit()
     return {"data": todo_updated_.first(), "detail": "Todo updated successfully !"}
+
+@app.post("/users", status_code=status.HTTP_201_CREATED, response_model=UserDictResponse)
+def create_user(user_: UserPostRequest, db_: Session = Depends(get_db)):
+    user_created_ = um.User(**user_.model_dump())
+    db_.add(user_created_)
+    db_.commit()
+    db_.refresh(user_created_)
+    return {"data": user_created_, "detail": "User created successfully !"}

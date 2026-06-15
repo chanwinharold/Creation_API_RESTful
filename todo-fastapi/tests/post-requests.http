@@ -7,3 +7,16 @@ Content-Type: application/json
     "title": "Faire la vaiselle",
     "category": "ménage"
 }
+
+
+###
+# @name POST User
+POST http://127.0.0.1:8000/users
+Content-Type: application/json
+
+
+{
+    "name": "test1",
+    "email": "test1@mail.com",
+    "password": "azertyazerty"
+}
