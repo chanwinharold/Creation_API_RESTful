@@ -1,7 +1,10 @@
 ###
 # @name Post Todo
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJ1c2VyX25hbWUiOiJ0ZXN0MSIsImV4cGlyZXNfaW4iOiIyMDI2LTA2LTIzIDAwOjI3OjM5LjYyNzAwOSswMDowMCJ9.MOfp5KLbedyCiEl9DnMtwuuyKd5kTbeez2rKngFg_sk
+
 POST http://127.0.0.1:8000/todos
 Content-Type: application/json
+Authorization: Bearer {{token}}}
 
 {
     "title": "Faire la vaiselle",
@@ -16,8 +19,8 @@ Content-Type: application/json
 
 
 {
-    "name": "test1",
-    "email": "test1@mail.com",
+    "name": "test2",
+    "email": "test2@mail.com",
     "password": "azertyazerty"
 }
 

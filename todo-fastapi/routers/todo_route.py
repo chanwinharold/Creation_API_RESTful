@@ -3,13 +3,15 @@ from sqlalchemy.orm import Session
 from database import get_db
 from schemes.todo_schema import TodoPostRequest, TodoUpdateRequest, TodoDictResponse, TodosDictResponse
 from models import todo_model as tm
+import oauth2
 
 
 router = APIRouter(prefix="/todos", tags=["Posts"])
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=TodoDictResponse)
-def post_todo(todo_: TodoPostRequest, db_: Session = Depends(get_db)):
+def post_todo(todo_: TodoPostRequest, db_: Session = Depends(get_db), token = Depends(oauth2.get_current_user)):
+
     todo_posted_ = tm.Todo(**todo_.model_dump())
     db_.add(todo_posted_)
     db_.commit()

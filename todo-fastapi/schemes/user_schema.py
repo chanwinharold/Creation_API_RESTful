@@ -23,3 +23,12 @@ class UserGlobalResponse(BaseModel):
 class UserDictResponse(BaseModel):
     data: UserGlobalResponse | None
     detail: str
+
+
+class Token(BaseModel):
+    token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    user_id: int
+    user_name: str

@@ -14,17 +14,17 @@ def login(user_: OAuth2PasswordRequestForm = Depends(), db_: Session = Depends(g
 
     user_fetched_ = db_.query(um.User).filter(um.User.name == user_.username).first()
     if not user_fetched_:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid credentials !")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credentials !")
 
     is_valid = verify_password(user_.password, str(user_fetched_.password))
     if not is_valid:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invalid credentials")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid credentials")
 
-    generated_token_ = oauth2.generate_token(payload_={"user_id": user_fetched_.id, "name": user_fetched_.name})
+    generated_token_ = oauth2.generate_token(payload_={"user_id": user_fetched_.id, "user_name": user_fetched_.name})
     return {
         "data": {
             "token": generated_token_,
-            "token_type": "cookie"
+            "token_type": "bearer"
         },
         "detail": "User logged in successfully !"
     }
