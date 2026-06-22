@@ -5,3 +5,7 @@ GET http://127.0.0.1:8000/todos
 ###
 # @name Get Todo
 GET http://127.0.0.1:8000/todos/1
+
+###
+# @name Get User
+GET http://127.0.0.1:8000/users/2

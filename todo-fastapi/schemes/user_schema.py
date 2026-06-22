@@ -11,6 +11,10 @@ class UserPostRequest(BaseModel):
 class UserUpdateRequest(UserPostRequest):
     confirm_password: str
 
+class UserLoginRequest(BaseModel):
+    name: str
+    password: str
+
 class UserGlobalResponse(BaseModel):
     name: str
     email: Optional[EmailStr]
