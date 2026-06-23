@@ -1,0 +1,4 @@
+.env
+./tests/http-client.private.env.json
+.venv
+.idea

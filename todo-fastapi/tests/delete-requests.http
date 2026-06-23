@@ -1,3 +1,4 @@
 ###
 # @name Delete Todo
-DELETE http://127.0.0.1:8000/todos/2
+DELETE http://127.0.0.1:8000/todos/3
+Authorization: Bearer {{authToken}}

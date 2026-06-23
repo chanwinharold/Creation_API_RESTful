@@ -6,8 +6,8 @@ from datetime import datetime, timedelta, UTC
 import os, dotenv, jwt
 
 dotenv.load_dotenv(".env")
-SECRET_KEY=os.getenv('AUTH_SECRET_KEY')
-ALGORITHM=os.getenv('AUTH_ALGORITHM')
+SECRET_KEY=os.getenv('AUTH_SECRET_KEY') or "my-secret_key"
+ALGORITHM=os.getenv('AUTH_ALGORITHM') or "HS256"
 EXPIRES_IN=os.getenv('AUTH_EXPIRES_IN') or 30
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -16,7 +16,7 @@ oauth2_schema = OAuth2PasswordBearer(tokenUrl="/auth/login")
 def generate_token(payload_: dict) -> str:
     c_payload_ = payload_.copy()
     expires_in_ = datetime.now(UTC) + timedelta(minutes=float(EXPIRES_IN))
-    c_payload_["expires_in"] = expires_in_.__str__()
+    c_payload_["exp"] = int(expires_in_.timestamp())
     encoded_ = jwt.encode(payload=c_payload_, key=SECRET_KEY, algorithm=ALGORITHM)
 
     return encoded_
@@ -27,7 +27,7 @@ def verify_token(token_: str, credentials_exception_):
         user_id_: int = int(decoded_.get("user_id"))
         user_name_: str = decoded_.get("user_name")
 
-        if not user_id_ or not user_name_:
+        if user_id_ is None or user_name_ is None:
             raise credentials_exception_
         token_data_ = TokenData(user_id=user_id_, user_name=user_name_)
     except InvalidTokenError:

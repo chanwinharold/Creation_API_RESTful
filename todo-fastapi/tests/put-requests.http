@@ -2,6 +2,7 @@
 # @name Update Todo
 PUT http://127.0.0.1:8000/todos/1
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
     "title": "Faire à manger",

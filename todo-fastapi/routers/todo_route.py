@@ -19,7 +19,7 @@ def post_todo(todo_: TodoPostRequest, db_: Session = Depends(get_db), token = De
     return {"data": todo_posted_, "detail": "Todo posted successfully !"}
 
 @router.get("/", response_model=TodosDictResponse)
-def get_todos(db_: Session = Depends(get_db)):
+def get_todos(db_: Session = Depends(get_db), token = Depends(oauth2.get_current_user)):
     todos_ = db_.query(tm.Todo).all()
 
     if not todos_:
@@ -28,7 +28,7 @@ def get_todos(db_: Session = Depends(get_db)):
 
 
 @router.get("/{id_}", response_model=TodoDictResponse)
-def get_post(id_: int, db_: Session = Depends(get_db)):
+def get_post(id_: int, db_: Session = Depends(get_db), token = Depends(oauth2.get_current_user)):
     todo_ = db_.query(tm.Todo).filter(tm.Todo.id == id_).first()
 
     if not todo_:
@@ -36,7 +36,7 @@ def get_post(id_: int, db_: Session = Depends(get_db)):
     return {"data": todo_, "detail": "Todo retrieved successfully !"}
 
 @router.delete("/{id_}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_todo(id_: int, db_: Session = Depends(get_db)):
+def delete_todo(id_: int, db_: Session = Depends(get_db), token = Depends(oauth2.get_current_user)):
     todo_ = db_.query(tm.Todo).filter(tm.Todo.id == id_)
 
     if not todo_.first():
@@ -47,7 +47,7 @@ def delete_todo(id_: int, db_: Session = Depends(get_db)):
     return
 
 @router.put("/{id_}", response_model=TodoDictResponse)
-def update_todo(id_: int, todo_: TodoUpdateRequest, db_: Session = Depends(get_db)):
+def update_todo(id_: int, todo_: TodoUpdateRequest, db_: Session = Depends(get_db), token = Depends(oauth2.get_current_user)):
     todo_updated_ = db_.query(tm.Todo).filter(tm.Todo.id == id_)
 
     if not todo_updated_.first():
